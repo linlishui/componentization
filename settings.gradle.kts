@@ -1,0 +1,10 @@
+include(":officialaccount")
+include(":square")
+include(":project")
+includeBuild("version")
+include(":home")
+include(":mine")
+include(":common")
+include(":login")
+include(":app")
+rootProject.name = "Componentization"

@@ -1,6 +1,0 @@
-include ':common'
-include ':order'
-include ':login'
-includeBuild("version")
-include ':app'
-rootProject.name = "Componentization"

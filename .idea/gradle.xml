@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
@@ -23,8 +24,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/home" />
             <option value="$PROJECT_DIR$/login" />
-            <option value="$PROJECT_DIR$/order" />
+            <option value="$PROJECT_DIR$/mine" />
+            <option value="$PROJECT_DIR$/officialaccount" />
+            <option value="$PROJECT_DIR$/project" />
+            <option value="$PROJECT_DIR$/square" />
             <option value="$PROJECT_DIR$/version" />
           </set>
         </option>

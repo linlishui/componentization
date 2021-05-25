@@ -73,9 +73,12 @@ class VersionConfigPlugin : Plugin<Project> {
         dependencies.apply {
             add(api, fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
             add(implementation, GradlePlugins.kotlinStdlib)
+            //如果module 的 name 不是common则引入common模块，不加次判断，活报错，提示我们common
+            //module自己引入自己，相当于递归了
             if (name != "common") {
-                add(implementation, project(":common"))
+                add(api, project(":common"))
             }
+            //引入autoService服务，主要为后续的组件化开发做准备，Kotlin中要使用kapt方式
             add(kapt, ThirdParty.autoService)
             add(compileOnly, ThirdParty.autoService)
             configTestDependencies()
@@ -86,17 +89,21 @@ class VersionConfigPlugin : Plugin<Project> {
     private fun Project.configAppDependencies() {
         dependencies.apply {
             add(implementation, fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+            //添加library工程，不用在build中编写
             add(implementation, GradlePlugins.kotlinStdlib)
+            add(implementation, project(":home"))
+            add(implementation, project(":project"))
+            add(implementation, project(":square"))
+            add(implementation, project(":officialaccount"))
             add(implementation, (project(":login")))
-            add(implementation, project(":order"))
             add(implementation, project(":common"))
+            add(implementation, project(":mine"))
             configTestDependencies()
         }
     }
 
 
-/// test 依赖配置
-
+    /// test 依赖配置
     private fun DependencyHandler.configTestDependencies() {
         testImplementation(Testing.testLibraries)
         androidTestImplementation(Testing.androidTestLibraries)
@@ -105,8 +112,10 @@ class VersionConfigPlugin : Plugin<Project> {
 
     ///kotlin插件
     private fun Project.configCommonPlugin() {
+        //添加android  或者 kotlin插件
         plugins.apply("kotlin-android")
-        plugins.apply("kotlin-android-extensions")
+        //已启用 使用viewBinding
+        //plugins.apply("kotlin-android-extensions")
         plugins.apply("kotlin-kapt")
     }
 
@@ -133,6 +142,7 @@ class VersionConfigPlugin : Plugin<Project> {
         defaultConfig {
             minSdkVersion(BuildConfig.minSdkVersion)
             targetSdkVersion(BuildConfig.targetSdkVersion)
+            multiDexEnabled = true
 
             versionCode = BuildConfig.versionCode
             versionName = BuildConfig.versionName
@@ -147,12 +157,12 @@ class VersionConfigPlugin : Plugin<Project> {
             )
         }
         signingConfigs {
-            register(BuildConfig.release) {
-                keyAlias = "bear"
-                keyPassword = "BEARSELLER"
-                storePassword = "bearseller"
-                storeFile = File("bearSeller.jks")
-            }
+            /* register(BuildConfig.release) {
+                 keyAlias = "bear"
+                 keyPassword = "BEARSELLER"
+                 storePassword = "bearseller"
+                 storeFile = File("bearSeller.jks")
+             }*/
 
             /*  register(BuildConfig.debug) {
                   keyAlias("bear")
@@ -163,7 +173,7 @@ class VersionConfigPlugin : Plugin<Project> {
         }
 
         buildTypes {
-            getByName(BuildConfig.release) {
+            /*getByName(BuildConfig.release) {
                 isMinifyEnabled = false
                 signingConfig = signingConfigs.getByName(BuildConfig.release)
                 proguardFiles(
@@ -174,7 +184,7 @@ class VersionConfigPlugin : Plugin<Project> {
 
             getByName(BuildConfig.debug) {
                 signingConfig = signingConfigs.getByName(BuildConfig.debug)
-            }
+            }*/
         }
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
